@@ -220,7 +220,7 @@ ${ONE_SHOT_EXAMPLE}
 
 2.  **Sintagmas y Núcleos:**
     *   'SN', 'SAdj', 'SAdv', 'SPrep'.
-    *   Dentro de cada sintagma, incluye etiquetas específicas para la función (p.ej. 'Det (D)', 'N (N)').
+    *   Dentro de cada sintagma, incluye etiquetas específicas para la función (p.ej. 'Det', 'N').
 
 3.  **Coordinación y Yuxtaposición:**
     *   Usa 'Prop - Coordinada X' cuando sea necesario. Recuerda colocar el nexo como nodo independiente.
