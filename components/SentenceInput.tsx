@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+﻿import React, { useState } from "react";
 
 interface SentenceInputProps {
   onAnalyze: (sentence: string) => void;
@@ -8,7 +7,7 @@ interface SentenceInputProps {
 }
 
 export const SentenceInput: React.FC<SentenceInputProps> = ({ onAnalyze, isLoading, disabled }) => {
-  const [sentence, setSentence] = useState<string>('');
+  const [sentence, setSentence] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +32,7 @@ export const SentenceInput: React.FC<SentenceInputProps> = ({ onAnalyze, isLoadi
           type="submit"
           disabled={isLoading || disabled || !sentence.trim()}
           className="w-full sm:w-auto px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-          style={{minHeight: 'calc(3 * 1.5rem + 2 * 0.75rem + 2px)'}} // Match textarea height approx.
+          style={{ minHeight: "calc(3 * 1.5rem + 2 * 0.75rem + 2px)" }}
         >
           {isLoading ? (
             <>
@@ -45,8 +44,19 @@ export const SentenceInput: React.FC<SentenceInputProps> = ({ onAnalyze, isLoadi
             </>
           ) : (
             <>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1 hidden sm:inline">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.25 12L17.437 9.154a4.5 4.5 0 00-3.09-3.09L11.5 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L18.25 12zm0 0l.813 2.846a4.5 4.5 0 003.09 3.09L24.75 12l-2.846-.813a4.5 4.5 0 00-3.09-3.09L18.25 12z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5 mr-1 hidden sm:inline"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.25 12L17.437 9.154a4.5 4.5 0 00-3.09-3.09L11.5 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L18.25 12zm0 0l.813 2.846a4.5 4.5 0 003.09 3.09L24.75 12l-2.846-.813a4.5 4.5 0 00-3.09-3.09L18.25 12z"
+                />
               </svg>
               <span>Analizar</span>
             </>
