@@ -88,14 +88,14 @@ export const LABEL_COLORS: { [key: string]: string } = {
   
   // Núcleos y Partículas
   'N': 'text-pink-300 border-pink-400',             // Nombre (si no es núcleo explícito N (N))
-  'N (N)': 'text-pink-300 border-pink-400',         // Nombre (Núcleo de SN)
-  'V (N)': 'text-emerald-300 border-emerald-400',   // Verbo (Núcleo de SV)
+  '(N)': 'text-pink-300 border-pink-400',         // Nombre (Núcleo de SN)
+  '(N)': 'text-emerald-300 border-emerald-400',   // Verbo (Núcleo de SV)
   'Adj': 'text-violet-300 border-violet-400',       // Adjetivo (si no es núcleo explícito Adj (N))
-  'Adj (N)': 'text-violet-300 border-violet-400',   // Adjetivo (Núcleo de SAdj)
+  '(N)': 'text-violet-300 border-violet-400',   // Adjetivo (Núcleo de SAdj)
   'Adv': 'text-amber-300 border-amber-400',         // Adverbio (si no es núcleo explícito Adv (N))
-  'Adv (N)': 'text-amber-300 border-amber-400',     // Adverbio (Núcleo de SAdv)
+  '(N)': 'text-amber-300 border-amber-400',     // Adverbio (Núcleo de SAdv)
   'Prep': 'text-orange-400 border-orange-500',       // Preposición (si no es núcleo explícito Prep (N))
-  'Prep (N)': 'text-orange-400 border-orange-500',   // Preposición (Núcleo de SPrep)
+  '(N)': 'text-orange-400 border-orange-500',   // Preposición (Núcleo de SPrep)
   'Pron': 'text-sky-200 border-sky-300',             // Pronombre
   'Det': 'text-slate-300 border-slate-400',           // Determinante
   'nx': 'text-stone-400 border-stone-500',            // Nexo (conjunción pura)
