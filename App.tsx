@@ -1,34 +1,38 @@
-﻿import React, { useState, useCallback } from "react";
+﻿import React, { useState, useCallback, useEffect } from "react";
 import { SentenceInput } from "./components/SentenceInput";
 import { SentenceGenerator } from "./components/SentenceGenerator";
 import { AnalysisDisplay } from "./components/AnalysisDisplay";
 import { LoadingSpinner } from "./components/LoadingSpinner";
 import { ErrorMessage } from "./components/ErrorMessage";
-import { ApiKeyModal } from "./components/ApiKeyModal";
-import {
-  analyzeSentence,
-  generateSentenceText,
-  isApiKeyConfigured,
-  configureApiKey,
-  clearStoredApiKey,
-  getStoredApiKey,
-} from "./services/geminiService";
+import { analyzeSentence, generateSentenceText, isApiKeyConfigured } from "./services/geminiService";
 import type { SentenceAnalysis } from "./types";
 
 type AppMode = "analyze" | "generate";
 
 const App: React.FC = () => {
-  const apiKeyAvailable = isApiKeyConfigured();
-
   const [mode, setMode] = useState<AppMode>("analyze");
-  const [apiConfigured, setApiConfigured] = useState<boolean>(apiKeyAvailable);
-  const [showApiKeyModal, setShowApiKeyModal] = useState<boolean>(!apiKeyAvailable);
-
   const [analysisResult, setAnalysisResult] = useState<SentenceAnalysis | null>(null);
   const [generatedSentence, setGeneratedSentence] = useState<string | null>(null);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [apiConfigured, setApiConfigured] = useState<boolean>(isApiKeyConfigured());
+
+  useEffect(() => {
+    if (apiConfigured) {
+      return;
+    }
+
+    const checkInterval = window.setInterval(() => {
+      if (isApiKeyConfigured()) {
+        setApiConfigured(true);
+        window.clearInterval(checkInterval);
+      }
+    }, 1000);
+
+    return () => {
+      window.clearInterval(checkInterval);
+    };
+  }, [apiConfigured]);
 
   const handleAnalyze = useCallback(async (text: string) => {
     const trimmed = text.trim();
@@ -37,17 +41,17 @@ const App: React.FC = () => {
       setAnalysisResult(null);
       return;
     }
+
     setIsLoading(true);
     setError(null);
     setAnalysisResult(null);
+
     try {
       const result = await analyzeSentence(trimmed);
       if (result) {
         setAnalysisResult(result);
       } else {
-        setError(
-          "No se pudo obtener un análisis válido. La respuesta del modelo llegó vacía o con un formato inesperado. Revisa la consola para más detalles."
-        );
+        setError("No se pudo obtener un análisis válido. La respuesta del modelo llegó vacía o con un formato inesperado. Revisa la consola para más detalles.");
       }
     } catch (e: any) {
       console.error("Error durante el análisis:", e);
@@ -64,6 +68,7 @@ const App: React.FC = () => {
       setGeneratedSentence(null);
       return;
     }
+
     setIsLoading(true);
     setError(null);
     setGeneratedSentence(null);
@@ -87,36 +92,13 @@ const App: React.FC = () => {
   const handleSwitchMode = (newMode: AppMode) => {
     setMode(newMode);
     setError(null);
+
     if (newMode === "generate") {
       setAnalysisResult(null);
     } else {
       setGeneratedSentence(null);
     }
   };
-
-  const handleOpenApiKeyModal = () => {
-    setShowApiKeyModal(true);
-  };
-
-  const handleSaveApiKey = (apiKey: string) => {
-    try {
-      configureApiKey(apiKey);
-      setApiConfigured(true);
-      setShowApiKeyModal(false);
-      setError(null);
-    } catch (e: any) {
-      console.error("No se pudo guardar la clave API:", e);
-      setError(e?.message || "No fue posible guardar la clave API proporcionada.");
-    }
-  };
-
-  const handleClearApiKey = () => {
-    clearStoredApiKey();
-    setApiConfigured(false);
-    setShowApiKeyModal(true);
-  };
-
-  const storedApiKey = getStoredApiKey();
 
   return (
     <div className="container mx-auto p-4 md:p-8 max-w-screen-xl w-full">
@@ -130,31 +112,11 @@ const App: React.FC = () => {
         <p className="text-slate-400 mt-2 text-sm sm:text-base">
           Introduce una oración o genera una con IA para obtener su análisis sintáctico detallado.
         </p>
-
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <button
-            type="button"
-            onClick={handleOpenApiKeyModal}
-            className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold rounded-md shadow-md transition"
-          >
-            {apiConfigured ? "Gestionar clave API" : "Configurar clave API"}
-          </button>
-
-          {apiConfigured && (
-            <button
-              type="button"
-              onClick={handleClearApiKey}
-              className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white text-sm font-semibold rounded-md shadow-md transition"
-            >
-              Quitar clave local
-            </button>
-          )}
-        </div>
       </header>
 
       {!apiConfigured && (
         <div className="mb-6">
-          <ErrorMessage message={'CONFIGURACIÓN REQUERIDA: La clave API de Gemini no está configurada. Pulsa en "Configurar clave API" para añadirla.'} />
+          <ErrorMessage message="CONFIGURACIÓN REQUERIDA: No se pudo inicializar la clave pública de Gemini. Inténtalo de nuevo más tarde o contacta con el administrador." />
         </div>
       )}
 
@@ -220,14 +182,6 @@ const App: React.FC = () => {
         <p>Potenciado por Gemini API. Análisis basado en la Nueva Gramática de la Lengua Española.</p>
         <p>&copy; {new Date().getFullYear()} Francisco David Sánchez Valencia</p>
       </footer>
-
-      {showApiKeyModal && (
-        <ApiKeyModal
-          onSave={handleSaveApiKey}
-          onClose={() => setShowApiKeyModal(false)}
-          currentApiKey={storedApiKey}
-        />
-      )}
     </div>
   );
 };
